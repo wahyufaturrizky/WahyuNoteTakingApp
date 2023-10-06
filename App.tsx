@@ -22,6 +22,8 @@ import HomeScreen from './src/sreens/HomeScreen';
 import {TouchableOpacity} from './src/components/TouchableOpacity';
 import {Image} from './src/components/Image';
 import {colors} from './src/style/color';
+import CreateNoteScreen from './src/sreens/CreateNote';
+import DetailNoteScreen from './src/sreens/DetailNote';
 
 const queryClient = new QueryClient();
 
@@ -54,6 +56,7 @@ function App(): JSX.Element {
               headerStyle: {
                 backgroundColor: colors.green.regular,
               },
+              headerBackVisible: false,
               headerTitleStyle: {
                 color: colors.white.regular,
               },
@@ -61,7 +64,7 @@ function App(): JSX.Element {
               headerRight: () => (
                 <TouchableOpacity
                   onPress={async () => {
-                    navigation.navigate('CreateTruck');
+                    navigation.navigate('CreateNote');
                   }}>
                   <Image
                     size={24}
@@ -72,6 +75,36 @@ function App(): JSX.Element {
             })}
             name="HomeScreen">
             {props => <HomeScreen {...props} />}
+          </Stack.Screen>
+
+          <Stack.Screen
+            options={() => ({
+              title: 'Create Note',
+              headerStyle: {
+                backgroundColor: colors.green.regular,
+              },
+              headerTitleStyle: {
+                color: colors.white.regular,
+              },
+              headerTintColor: colors.white.regular,
+            })}
+            name="CreateNote">
+            {props => <CreateNoteScreen {...props} />}
+          </Stack.Screen>
+
+          <Stack.Screen
+            options={({route}) => ({
+              title: route.params?.detailData?.title,
+              headerStyle: {
+                backgroundColor: colors.green.regular,
+              },
+              headerTitleStyle: {
+                color: colors.white.regular,
+              },
+              headerTintColor: colors.white.regular,
+            })}
+            name="DetailNote">
+            {props => <DetailNoteScreen {...props} />}
           </Stack.Screen>
         </Stack.Navigator>
       </QueryClientProvider>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -5,7 +6,7 @@
  * @format
  */
 
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {useFieldArray, useForm, useWatch} from 'react-hook-form';
 import {useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -18,36 +19,62 @@ import {Text} from '../components/Text';
 import {View} from '../components/View';
 import {colors} from '../style/color';
 import {FormValuesListOfNote} from '../interface/note.interface';
+import {useNoteList} from '../services/note/useNote';
+import {useFocusEffect} from '@react-navigation/native';
 
-const HomeScreen = ({navigation: {navigate}}: any) => {
+const HomeScreen = ({navigation}: any) => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : colors.green.regular,
   };
 
-  const {control: controlTruck, setValue: setValueTruck} =
+  const {control: controlNote, setValue: setValueNote} =
     useForm<FormValuesListOfNote>({
       defaultValues: {
         listOfNote: [],
       },
     });
 
-  const {fields: fieldsTruck} = useFieldArray({
-    control: controlTruck,
+  const {fields: fieldsNote} = useFieldArray({
+    control: controlNote,
     name: 'listOfNote',
+    keyName: 'noteId',
   });
 
   useWatch({
-    control: controlTruck,
+    control: controlNote,
     name: 'listOfNote',
   });
+
+  const {isLoading: isLoadingNoteList, refetch: refetchNoteList} = useNoteList({
+    options: {
+      onSuccess: (data: any) => {
+        console.log('@data', data);
+        setValueNote('listOfNote', data.data);
+      },
+    },
+  });
+
+  useEffect(
+    () =>
+      navigation.addListener('beforeRemove', e => {
+        e.preventDefault();
+      }),
+    [navigation],
+  );
+
+  useFocusEffect(
+    useCallback(() => {
+      refetchNoteList();
+    }, []),
+  );
 
   const renderFooter = () => (
     <View>
       <Spinner size="small" color={colors.green.regular} />
       <Text
-        label={'strings.common.noMoreData'}
+        label={'Load more data'}
         fontSize={14}
         fontWeight="400"
         color={colors.black.regular}
@@ -59,7 +86,7 @@ const HomeScreen = ({navigation: {navigate}}: any) => {
   const renderEmpty = () => (
     <View>
       <Text
-        label={'strings.newFFbGrading.noTrucksWillBeDisplayed'}
+        label={'Empty note'}
         fontSize={14}
         fontWeight="400"
         color={colors.black.regular}
@@ -68,6 +95,8 @@ const HomeScreen = ({navigation: {navigate}}: any) => {
     </View>
   );
 
+  console.log('@fieldsNote', fieldsNote);
+
   return (
     <SafeAreaView flex={1} backgroundColor={colors.white.lighter}>
       <StatusBar
@@ -75,35 +104,26 @@ const HomeScreen = ({navigation: {navigate}}: any) => {
         backgroundColor={backgroundStyle.backgroundColor}
       />
 
-      <View
-        padding={24}
-        borderBottomColor={colors.white.light}
-        backgroundColor={colors.white.regular}
-        flexDirection="row"
-        alignItems="center"
-        borderBottomWidth={1}>
-        <Text
-          label={'strings.newFFbGrading.numberOfTruck'}
-          fontSize={18}
-          fontWeight="400"
-          color={colors.black.regular}
+      {isLoadingNoteList ? (
+        <Spinner size="small" color={colors.green.regular} />
+      ) : (
+        <FlatList
+          data={fieldsNote}
+          renderItem={({item}) => {
+            return (
+              <CardItem
+                onPress={() =>
+                  navigation.navigate('DetailNote', {detailData: item})
+                }
+                data={item}
+              />
+            );
+          }}
+          // ListFooterComponent={renderFooter}
+          ListEmptyComponent={renderEmpty}
+          keyExtractor={(item, index) => index}
         />
-      </View>
-
-      <FlatList
-        data={fieldsTruck}
-        renderItem={({item}) => {
-          return (
-            <CardItem
-              onPress={() => navigate('DetailFFBGrading', {detailData: item})}
-              data={item}
-            />
-          );
-        }}
-        // ListFooterComponent={renderFooter}
-        ListEmptyComponent={renderEmpty}
-        keyExtractor={(item, index) => index}
-      />
+      )}
     </SafeAreaView>
   );
 };

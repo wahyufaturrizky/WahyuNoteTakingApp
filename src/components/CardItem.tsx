@@ -23,9 +23,16 @@ export const CardItem = ({
         justifyContent="space-between">
         <View>
           <Text
-            label={data.truck_no}
+            label={data.title}
             fontSize={16}
             fontWeight="700"
+            color={colors.black.regular}
+          />
+
+          <Text
+            label={data.desc}
+            fontSize={16}
+            fontWeight="400"
             color={colors.black.regular}
           />
         </View>
