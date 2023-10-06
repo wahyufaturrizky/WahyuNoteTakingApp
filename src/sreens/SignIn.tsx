@@ -7,7 +7,7 @@
  */
 
 import React, {useEffect} from 'react';
-import {StatusBar, useColorScheme} from 'react-native';
+import {Alert, StatusBar, useColorScheme} from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useForm} from 'react-hook-form';
@@ -19,6 +19,19 @@ import {Text} from '../components/Text';
 import {View} from '../components/View';
 import {colors} from '../style/color';
 import {useSignIn} from '../services/note/useNote';
+import TouchID from 'react-native-touch-id';
+
+const optionalConfigObject = {
+  title: 'Please Authenticate', // Android
+  imageColor: '#000', // Android
+  imageErrorColor: '#ff0000', // Android
+  sensorDescription: 'Slightly Touch sensor', // Android
+  sensorErrorDescription: 'Failed', // Android
+  cancelText: 'Cancel', // Android
+  fallbackLabel: 'Show Passcode', // iOS (if empty, then label is hidden)
+  unifiedErrors: false, // use unified error messages (default false)
+  passcodeFallback: false, // iOS
+};
 
 const SignInScreen = ({navigation}: {navigation: any}) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -54,6 +67,34 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
 
   const onSubmit = (data: {email: string; password: string}) => {
     createSignIn(data);
+  };
+
+  const handleAuth = (data: {email: string; password: string}) => {
+    TouchID.isSupported()
+      .then(biometryType => {
+        if (biometryType === 'FaceID') {
+          TouchID.authenticate('', optionalConfigObject)
+            .then(success => {
+              createSignIn(data);
+            })
+            .catch(error => {
+              Alert.alert('Authentication Failed', error.message);
+            });
+        } else {
+          TouchID.authenticate('', optionalConfigObject)
+            .then(success => {
+              createSignIn(data);
+            })
+            .catch(error => {
+              Alert.alert('Authentication Failed', error.message);
+            });
+        }
+      })
+      .catch(error => {
+        // Failure code
+        console.log(error);
+        Alert.alert('Authentication Failed', error.message);
+      });
   };
 
   useEffect(() => {
@@ -120,6 +161,17 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
           control={control}
         />
       </View>
+
+      <Button
+        backgroundColor={colors.green.regular}
+        label={isLoadingSignIn ? 'Loading...' : 'Use Biometric Auth'}
+        labelColor={colors.white.regular}
+        textTransform="uppercase"
+        onPress={handleSubmit(handleAuth)}
+        sizeLabel={20}
+        disabled={isLoadingSignIn}
+        marginBottom={24}
+      />
 
       <Button
         backgroundColor={colors.green.regular}
