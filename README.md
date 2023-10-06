@@ -1,6 +1,6 @@
-# Nota Taking App by Wahyu Fatur Rizki
+# Note Taking App by Wahyu Fatur Rizki
 
-Nota Taking App for manage note and secure them.
+Note Taking App for manage note and secure them.
 DEMO APP: https://drive.google.com/file/d/12-BOYaAD7OPh6dyx2Yn3mAehHCZ7cA7s/view?usp=sharing
 User: wahyufaturrizkyy@gmail.com
 Pass: Welcome1
