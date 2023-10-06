@@ -24,6 +24,9 @@ import {Image} from './src/components/Image';
 import {colors} from './src/style/color';
 import CreateNoteScreen from './src/sreens/CreateNote';
 import DetailNoteScreen from './src/sreens/DetailNote';
+import {View} from './src/components/View';
+import {Alert} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const queryClient = new QueryClient();
 
@@ -62,15 +65,42 @@ function App(): JSX.Element {
               },
               headerTintColor: colors.white.regular,
               headerRight: () => (
-                <TouchableOpacity
-                  onPress={async () => {
-                    navigation.navigate('CreateNote');
-                  }}>
-                  <Image
-                    size={24}
-                    source={require('./src/assets/icons/ic_plus.png')}
-                  />
-                </TouchableOpacity>
+                <View flexDirection="row" alignItems="center">
+                  <View marginRight={8}>
+                    <TouchableOpacity
+                      onPress={async () => {
+                        Alert.alert('Hello', 'Do you want log out?', [
+                          {
+                            text: 'Cancel',
+                            onPress: () => console.log('Cancel Pressed'),
+                            style: 'cancel',
+                          },
+                          {
+                            text: 'OK',
+                            onPress: () => {
+                              AsyncStorage.removeItem('token');
+                              navigation.navigate('SignIn');
+                            },
+                          },
+                        ]);
+                      }}>
+                      <Image
+                        size={24}
+                        source={require('./src/assets/icons/ic_log_out.png')}
+                      />
+                    </TouchableOpacity>
+                  </View>
+
+                  <TouchableOpacity
+                    onPress={async () => {
+                      navigation.navigate('CreateNote');
+                    }}>
+                    <Image
+                      size={24}
+                      source={require('./src/assets/icons/ic_plus.png')}
+                    />
+                  </TouchableOpacity>
+                </View>
               ),
             })}
             name="HomeScreen">
