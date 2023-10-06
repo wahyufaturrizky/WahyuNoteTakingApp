@@ -6,7 +6,7 @@
  * @format
  */
 
-import React, {useEffect} from 'react';
+import {useEffect, useCallback} from 'react';
 import {Alert, StatusBar, useColorScheme} from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -20,6 +20,7 @@ import {View} from '../components/View';
 import {colors} from '../style/color';
 import {useSignIn} from '../services/note/useNote';
 import TouchID from 'react-native-touch-id';
+import {useFocusEffect} from '@react-navigation/native';
 
 const optionalConfigObject = {
   title: 'Please Authenticate', // Android
@@ -97,16 +98,18 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
       });
   };
 
-  useEffect(() => {
-    const fetchToken = async () => {
-      const res = await AsyncStorage.getItem('token');
-      if (res) {
-        navigation.navigate('HomeScreen');
-      }
-    };
+  useFocusEffect(
+    useCallback(() => {
+      const fetchToken = async () => {
+        const res = await AsyncStorage.getItem('token');
+        if (res) {
+          navigation.navigate('HomeScreen');
+        }
+      };
 
-    fetchToken();
-  }, []);
+      fetchToken();
+    }, []),
+  );
 
   return (
     <SafeAreaView flex={1} padding={24} backgroundColor={colors.white.lighter}>

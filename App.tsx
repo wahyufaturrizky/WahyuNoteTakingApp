@@ -72,13 +72,18 @@ function App(): JSX.Element {
                         Alert.alert('Hello', 'Do you want log out?', [
                           {
                             text: 'Cancel',
-                            onPress: () => console.log('Cancel Pressed'),
+                            onPress: () => {},
                             style: 'cancel',
                           },
                           {
                             text: 'OK',
-                            onPress: () => {
-                              AsyncStorage.removeItem('token');
+                            onPress: async () => {
+                              await AsyncStorage.removeItem('token');
+
+                              navigation.addListener('beforeRemove', e => {
+                                e;
+                              });
+
                               navigation.navigate('SignIn');
                             },
                           },

@@ -6,7 +6,8 @@
  * @format
  */
 
-import React, {useCallback, useEffect} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
+import React, {useCallback} from 'react';
 import {useFieldArray, useForm, useWatch} from 'react-hook-form';
 import {useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -17,10 +18,9 @@ import {Spinner} from '../components/Spinner';
 import {StatusBar} from '../components/StatusBar';
 import {Text} from '../components/Text';
 import {View} from '../components/View';
-import {colors} from '../style/color';
 import {FormValuesListOfNote} from '../interface/note.interface';
 import {useNoteList} from '../services/note/useNote';
-import {useFocusEffect} from '@react-navigation/native';
+import {colors} from '../style/color';
 
 const HomeScreen = ({navigation}: any) => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -55,14 +55,6 @@ const HomeScreen = ({navigation}: any) => {
       },
     },
   });
-
-  useEffect(
-    () =>
-      navigation.addListener('beforeRemove', e => {
-        e.preventDefault();
-      }),
-    [navigation],
-  );
 
   useFocusEffect(
     useCallback(() => {
