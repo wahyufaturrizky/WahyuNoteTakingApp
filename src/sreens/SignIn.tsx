@@ -29,8 +29,8 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
 
   const {control, handleSubmit} = useForm({
     defaultValues: {
-      email: 'eve.holt@reqres.in',
-      password: 'cityslicka',
+      email: 'wahyufaturrizkyy@gmail.com',
+      password: 'Welcome1',
     },
   });
 
@@ -38,9 +38,15 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
     options: {
       onSuccess: (data: any) => {
         console.log('🚀 ~ file: SignIn.tsx:39 ~ SignInScreen ~ data:', data);
-        AsyncStorage.setItem('token', data.data.token);
+        const {session} = data.data;
+        const {access_token} = session;
+        console.log(
+          '🚀 ~ file: SignIn.tsx:43 ~ SignInScreen ~ access_token:',
+          access_token,
+        );
+        AsyncStorage.setItem('token', access_token);
 
-        navigation.navigate('AutomaticFFBGrading');
+        navigation.navigate('HomeScreen');
       },
       onError: () => {},
     },
@@ -54,7 +60,7 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
     const fetchToken = async () => {
       const res = await AsyncStorage.getItem('token');
       if (res) {
-        navigation.navigate('AutomaticFFBGrading');
+        navigation.navigate('HomeScreen');
       }
     };
 
@@ -70,7 +76,7 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
 
       <View flex={1}>
         <Text
-          label={'Wadidau'}
+          label={'Note Taking App'}
           fontSize={24}
           textAlign="center"
           fontWeight="700"

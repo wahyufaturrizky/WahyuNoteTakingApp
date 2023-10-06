@@ -10,7 +10,6 @@ import {useColorScheme} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import packageJson from '../../package.json';
-import {Image} from '../components/Image';
 import {SafeAreaView} from '../components/SafeAreaView';
 import {StatusBar} from '../components/StatusBar';
 import {Text} from '../components/Text';
@@ -43,14 +42,8 @@ const SplashScreen = ({navigation}: any) => {
       />
 
       <View justifyContent="center" alignItems="center" flex={1}>
-        <Image
-          size={200}
-          source={require('../assets/images/asianagri-logo.png')}
-          resizeMode="contain"
-        />
-
         <Text
-          label={'strings.signIn.automaticFfbGrading'}
+          label={'Mobile Note Taking App'}
           fontSize={24}
           textAlign="center"
           fontWeight="700"
@@ -59,15 +52,7 @@ const SplashScreen = ({navigation}: any) => {
         />
 
         <Text
-          label="(Automated FFB Grading)"
-          fontSize={24}
-          textAlign="center"
-          fontWeight="700"
-          color={colors.black.regular}
-        />
-
-        <Text
-          label={'(' + 'strings.splash.poc' + ')'}
+          label={'by Wahyu Fatur Rizki'}
           fontSize={14}
           textAlign="center"
           fontWeight="400"
@@ -84,7 +69,7 @@ const SplashScreen = ({navigation}: any) => {
         />
 
         <Text
-          label={'strings.common.loading'}
+          label={'loading...'}
           fontSize={14}
           textAlign="center"
           fontWeight="400"

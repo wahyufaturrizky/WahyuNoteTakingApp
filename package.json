@@ -7,7 +7,15 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "adev-win": "SET APP_ENV=dev && npx react-native run-android",
+    "aprod-win": "npx react-native run-android",
+    "adev-mac": "APP_ENV=dev npx react-native run-android",
+    "aprod-mac": "npx react-native run-android",
+    "adev-release-win": "cd android && SET APP_ENV=.env.dev ./gradlew assembleRelease",
+    "aprod-release-win": "cd android && SET APP_ENV=.env ./gradlew assembleRelease",
+    "adev-release-mac": "cd android && APP_ENV=.env.dev ./gradlew assembleRelease",
+    "aprod-release-mac": "cd android && APP_ENV=.env ./gradlew assembleRelease"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.19.3",

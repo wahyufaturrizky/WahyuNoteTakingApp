@@ -18,6 +18,10 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import SignInScreen from './src/sreens/SignIn';
 import SplashScreen from './src/sreens/Splash';
+import HomeScreen from './src/sreens/HomeScreen';
+import {TouchableOpacity} from './src/components/TouchableOpacity';
+import {Image} from './src/components/Image';
+import {colors} from './src/style/color';
 
 const queryClient = new QueryClient();
 
@@ -42,6 +46,32 @@ function App(): JSX.Element {
             }}
             name="SignIn">
             {props => <SignInScreen {...props} />}
+          </Stack.Screen>
+
+          <Stack.Screen
+            options={({navigation}) => ({
+              title: 'List of note',
+              headerStyle: {
+                backgroundColor: colors.green.regular,
+              },
+              headerTitleStyle: {
+                color: colors.white.regular,
+              },
+              headerTintColor: colors.white.regular,
+              headerRight: () => (
+                <TouchableOpacity
+                  onPress={async () => {
+                    navigation.navigate('CreateTruck');
+                  }}>
+                  <Image
+                    size={24}
+                    source={require('./src/assets/icons/ic_plus.png')}
+                  />
+                </TouchableOpacity>
+              ),
+            })}
+            name="HomeScreen">
+            {props => <HomeScreen {...props} />}
           </Stack.Screen>
         </Stack.Navigator>
       </QueryClientProvider>
